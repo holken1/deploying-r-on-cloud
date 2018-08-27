@@ -1,0 +1,14 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: shiny-docker-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: shiny-docker
+    spec:
+      containers:
+      - name: shiny-docker
+        image: registry.eu-de.bluemix.net/shiny-tutorial/shiny-docker:latest
