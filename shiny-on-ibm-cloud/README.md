@@ -1,6 +1,7 @@
 # Deploying Shiny apps on IBM Cloud
 
 Holger Hellebro, IBM Global Business Services
+
 2018-08-22
 
 
@@ -40,6 +41,8 @@ get when upgrading your account.)
 After upgrading your account you can create a cluster. Note, however,
 that by the default, the "Standard" cluster is selected (not free),
 and we need to select the "Free" cluster before moving on.
+
+![Creating a container registry](https://github.com/holken1/deploying-r-on-cloud/blob/master/shiny-on-ibm-cloud/img/Creating%20a%20new%20cluster.png?raw=true "Creating a free cluster")
 
 So select the "Free" cluster, choose a geographical region that makes
 sense to you, and feel free to give your cluster a name. I'll go with
