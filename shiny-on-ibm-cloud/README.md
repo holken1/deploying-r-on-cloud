@@ -146,7 +146,7 @@ Press `Ctrl-C` to stop the container.
 Great, now we have a working Docker image we want to deploy to the
 cluster.
 
-## Pushing the app to the Container Registry
+## Pushing the image to the Container Registry
 
 The software Kubernetes is managing our cluster, and we will shortly
 ask it to deploy our application. However, there is no way of directly
@@ -231,23 +231,45 @@ create the deployment by the following command:
 
 ```
 $ kubectl apply -f deployment.yaml
-Deployment shiny-docker-deployment created.
+deployment "shiny-docker-deployment" created
 ```
 
-At this point, Kubernetes will pull the image from the container
-registry and start it in something called a `pod` - a pod is a
-name for a runnable unit consisting of one or more docker containers.
+Kubernetes will now pull the image from the container registry and
+start it in something called a `pod` - a pod is a name for a runnable
+unit consisting of one or more docker containers.
 
 ## Verifying the deployment
 
+At this point we should check that the deployment was successful and
+that no errors are preventing the pod from running correctly.
 
+One way to do this is to open the Kubernetes Dashboard which is a web
+page where all aspects of the cluster can be inspected and controlled.
 
+There is a blue button on the cluster overview page that opens this
+user interface.
+
+![Cluster overview](https://github.com/holken1/deploying-r-on-cloud/blob/master/shiny-on-ibm-cloud/img/My%20cluster%20overview.png?raw=true "Cluster overview")
+
+Clicking the button "Kubernetes Dashboard" will take you to the
+dashboard. If all is well you will see a green status for your
+deployment. If not, open the pod in question and check its logs for
+clues.
+
+![Kubernetes Dashboard](https://github.com/holken1/deploying-r-on-cloud/blob/master/shiny-on-ibm-cloud/img/Dashboard%20-%20successful%20overview.png?raw=true "Kubernetes Dashboard")
+
+When you have confirmed that the app is started correctly (green
+status), it's time to expose it to the internet so that you can try it
+out.
 
 ## Exposing the app
 
-Creating a Kubernetes "service"
+Kubernetes uses a concept called "services" to control exposure of
+apps to the Internet. There are various kinds of services, but for the
+free cluster that we are focusing on here, only NodePort services are
+available.
 
-Can we create a LoadBalancer service with the free cluster?
-No, but it can be accessed using a NodePort although the IP/Port may
-change in some situations.
+The NodePort service allows opening one port on the worker node to the
+Internet, mapping it to a port on our running container. This will
+allow us to access the app.
 
