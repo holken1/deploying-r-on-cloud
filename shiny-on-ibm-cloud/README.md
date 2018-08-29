@@ -9,11 +9,11 @@ Holger Hellebro, IBM Global Business Services
 In this tutorial we will create a Kubernetes cluster and a container
 registry on IBM Cloud. We will build and push a demonstration Shiny
 application using Docker. We will then deploy the application to
-Kubernetes and exposed it to the Internet.
+Kubernetes and expose it to the Internet.
 
 We will use a free account on IBM Cloud and a free Kubernetes
 cluster. A free cluster is aimed at evaluation and have certain
-limitations but we can still use it to host a few Shiny
+limitations, but we can still use it to host a few Shiny
 applications. The main drawback is that the cluster will be deleted
 after a month. However, we are free to create a new one, and
 re-deploying the application is only a few commands.
@@ -22,10 +22,10 @@ But of course, for any production work I would strongly recommend
 upgrading to a standard cluster. It doesn't have to be a big and
 expensive cluster, provided your workload is limited.
 
-Disclaimer: This tutorial including the comments around costs and
+Disclaimer: This tutorial including any comments around cost and
 pricing is based on the current conditions. Since the terms and
 policies change regularly, you should always check the terms when you
-sign up, and before you create services on the cloud.
+sign up, and before you create any services on the cloud.
 
 ## Prerequisites
 
@@ -50,20 +50,20 @@ privacy agreement.
 ### Creating a Kubernetes Cluster
 
 The cluster is where your application will run. In the free tier we
-are restricted to using one server only, but it's enough to get
-started, and for small applications with not too many users, it might
-be just what you need.
+are restricted to using one server ("worker node") only, but that's
+enough to get started, and for small applications without too many
+users, it might be just what you need.
 
 Click "Catalog" in the top navigation bar and select the "IBM Cloud
 Kubernetes Service" under the "Containers" heading.
 
 At this point you need to upgrade your account and enter a credit
 card, but rest assured, the cluster we will use is free and won't
-generate any costs. To be sure, read the terms carefully on as they
+generate any costs. However, read the terms carefully on as they
 could have changed after this tutorial was written.
 
 After upgrading your account you can create a cluster. Note that by
-the default, the "Standard" cluster is selected (not free), and we
+default, the "Standard" cluster is selected (not free), and we
 need to select the "Free" cluster before moving on.
 
 ![Creating a container registry](https://github.com/holken1/deploying-r-on-cloud/blob/master/shiny-on-ibm-cloud/img/Creating%20a%20new%20cluster.png?raw=true "Creating a free cluster")
@@ -73,7 +73,7 @@ sense to you, and feel free to give your cluster a name. I'll go with
 the default `mycluster` in this example. Now hit the "Create Cluster"
 button.
 
-It will take several minutes for the cluster to get created. If you
+It might take several minutes for the cluster to get created. If you
 don't see the instructions "Gain access to your cluster", wait for a
 while, then refresh the page. You will need to go through the steps
 listed in the "Gain access to your cluster" page, to connect to the
@@ -85,14 +85,14 @@ come back and complete the "gain access" steps later.
 ### Creating a Container Registry
 
 The docker images that contain the actual code to be run on the
-cluster you actually don't upload to the cluster upon
-deployment. Instead, you make the images available in a registry, and
-Kubernetes will download (pull) them at deployment time.
+cluster are not uploaded to the cluster upon deployment. Instead, you
+make the images available ("push") in a registry, and Kubernetes will download
+("pull") them at deployment time.
 
-The registry could be the public Docker Hub for instance, however images
-stored there are generally publicly available unless you pay for a
-subscription. IBM Cloud contains a container registry, where you can
-store Docker images that you don't want publicly exposed.
+The registry could be the public Docker Hub for instance. However,
+images stored there are generally publicly available, which isn't
+always a good idea. IBM Cloud contains a container registry, where you
+can store Docker images that you don't want publicly exposed.
 
 In the IBM Cloud console, click the create resource button, and in the
 catalog that appears, select "IBM Cloud Container Registry" under the
@@ -101,9 +101,9 @@ catalog that appears, select "IBM Cloud Container Registry" under the
 ![Creating a container registry](https://github.com/holken1/deploying-r-on-cloud/blob/master/shiny-on-ibm-cloud/img/Catalog%20-%20Container%20Registry.png?raw=true "Creating a container registry")
 
 Click "Getting Started" and walk through the steps that will have you
-installing some software on your workstation, create a "namespace" where
-your images will reside, and finally test it out using the Docker
-`hello-world` app to see that it's working.
+installing some software on your workstation, create a so called
+"namespace" where your images will reside, and finally test it out
+using the Docker `hello-world` app to see that it's working.
 
 Make note of the namespace you create as we will use it later.
 
@@ -112,7 +112,6 @@ I will use `shiny-tutorial` as my namespace.
 ```
 $ ibmcloud cr namespace-add shiny-tutorial
 ```
-
 
 ## Preparing for deployment
 
@@ -273,13 +272,18 @@ Kubernetes will now pull the image from the container registry and
 start it in something called a `pod` - a pod is a name for a runnable
 unit consisting of one or more docker containers.
 
+If you get error messages at this stage, check that you have completed
+all the steps in the "Gain access to your cluster" section, as
+described above, in the section "Creating a Kubernetes Cluster".
+
 ## Verifying the deployment
 
 At this point we should check that the deployment was successful and
 that no errors are preventing the pod from running correctly.
 
-One way to do this is to open the Kubernetes Dashboard which is a web
-page where all aspects of the cluster can be inspected and controlled.
+A convenient way to do this is to open the Kubernetes Dashboard which
+is a web interface where all aspects of the cluster can be inspected and
+controlled.
 
 There is a blue button on the cluster overview page that opens this
 user interface.
@@ -301,10 +305,10 @@ out.
 
 Kubernetes uses a concept called "services" to control exposure of
 apps to the Internet. There are various kinds of services, but for the
-free cluster that we are focusing on here, only NodePort services are
+free cluster that we are focusing on here, only `NodePort` services are
 available.
 
-The NodePort service allows opening one port on the worker node to the
+The `NodePort` service allows opening one port on the worker node to the
 Internet, mapping it to a port on our running container. This will
 allow us to access the app.
 
@@ -369,13 +373,13 @@ see the demo application loading correctly.
 
 ![Shiny](https://github.com/holken1/deploying-r-on-cloud/blob/master/shiny-on-ibm-cloud/img/shiny.png?raw=true "Shiny")
 
-The NodePort service works but is a little fiddly. The IP number can
-also change when the worker node is removed or re-created. If you
-upgrade to a Standard cluster (not free) you can use the LoadBalancer
+The NodePort service works, but is a little fiddly. The IP number will
+also change if the worker node is removed or re-created. If you
+upgrade to a Standard cluster (non-free) you can use the LoadBalancer
 or Ingress type of service instead. Not only will it give you an IP
-and port number directly, it will also balance the load when you have
-multiple instances of your app running, which greatly helps with
-performance for Shiny applications.
+and a configurable port number, it will also allow you to have
+multiple instances of your app running behind a load balancer. This
+greatly improves performance for Shiny applications.
 
 ## Summary
 
