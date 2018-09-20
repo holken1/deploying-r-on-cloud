@@ -77,7 +77,9 @@ It might take several minutes for the cluster to get created. If you
 don't see the instructions "Gain access to your cluster", wait for a
 while, then refresh the page. You will need to go through the steps
 listed in the "Gain access to your cluster" page, to connect to the
-cluster before you can deploy any applications.
+cluster before you can deploy any applications. If you don't see the
+"Gain access to your cluster" instructions, it's on the "Access" tab
+on the main page of your cluster service.
 
 While you wait, you may want to move forward with the next section and
 come back and complete the "gain access" steps later.
@@ -274,7 +276,9 @@ unit consisting of one or more docker containers.
 
 If you get error messages at this stage, check that you have completed
 all the steps in the "Gain access to your cluster" section, as
-described above, in the section "Creating a Kubernetes Cluster".
+described above, in the section "Creating a Kubernetes Cluster". In
+particular, verify that `kubectl get nodes` is able to show some info
+on your cluster node without error messages.
 
 ## Verifying the deployment
 
