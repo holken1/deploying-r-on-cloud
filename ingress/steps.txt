@@ -1,0 +1,18 @@
+
+ibmcloud cr login
+
+docker build . -t registry.eu-de.bluemix.net/ingress/demo-web:latest
+docker push registry.eu-de.bluemix.net/ingress/demo-web:latest
+
+# check that we are connected
+kubectl cluster-info
+
+kubectl apply -f deploy-web.yaml
+kubectl apply -f service-myshiny.yaml
+
+kubectl apply -f ingress.yaml
+
+# view the result
+kubectl get deployments
+kubectl get pods
+kubectl get services

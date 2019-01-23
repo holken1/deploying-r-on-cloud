@@ -1,0 +1,14 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: myshiny-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: myshiny
+    spec:
+      containers:
+      - name: myshiny
+        image: docker.io/holken/myshiny:latest

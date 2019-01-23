@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: my-test-ingress
+  annotations:
+    ingress.bluemix.net/rewrite-path: "serviceName=myshiny-service rewrite=/"
+    ingress.bluemix.net/appid-auth: "bindSecret=binding-appid-test namespace=default requestType=web serviceName=myshiny-service,web-service"
+spec:
+   tls:
+   - hosts:
+     - growsmarter-test.eu-de.containers.appdomain.cloud
+     secretName: growsmarter-test
+   rules:
+   - host: growsmarter-test.eu-de.containers.appdomain.cloud
+     http:
+       paths:
+       - path: /shiny/
+         backend:
+           serviceName: myshiny-service
+           servicePort: 3838
+       - path: /
+         backend:
+           serviceName: web-service
+           servicePort: 80
